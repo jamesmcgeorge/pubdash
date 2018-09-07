@@ -122,7 +122,6 @@ export function getUniqueTime(entries: fc.TimeEntry[]): number {
         return 0;
     });
     let lastTimeEnd = null;
-    let uTinMilli = 0;
     for (var i in entries) {
 
         if (entries[i].isSameTimeFrame === false) { continue; }
@@ -171,7 +170,6 @@ export function parseEntry(timespan:any, entry: any): number {
 
     if (flag === "OneDay") {
         if (date.getDate() === timeStart.getDate() && date.getMonth() === timeStart.getMonth()) {
-            //logger.info("Time was entered for the same day");
             number = entry.actualHours;
         } 
     }
@@ -179,9 +177,6 @@ export function parseEntry(timespan:any, entry: any): number {
         if (timespan === TimeSpan.ThisWeek) {
             let dates: Date[] = getThisWeek();
             let start = new Date(timeStart.getTime() - (timeStart.getDay() * 86400000));
-            /*logger.info("This Week Dates:");
-            logger.info(start.toString());
-            logger.info(dates[0].toString());*/
             if (start.getDate() === dates[0].getDate() && start.getMonth() === dates[0].getMonth()) {
                 number = entry.actualHours;
             }
@@ -190,9 +185,6 @@ export function parseEntry(timespan:any, entry: any): number {
         if (timespan === TimeSpan.LastWeek) {
             let dates: Date[] = getLastWeek();
             let start = new Date(timeStart.getTime() - (timeStart.getDay() * 86400000));
-            /*logger.info("Last Week Dates:");
-            logger.info(start.toString());
-            logger.info(dates[0].toString());*/
             if (start.getDate() === dates[0].getDate() && start.getMonth() === dates[0].getMonth()) {
                 number = entry.actualHours;
             }
@@ -231,12 +223,10 @@ async function getAssignedTickets(timeEntries: Object) {
         if (ticket.board.id !== 1) {continue;}
         let resources = ticket.resources.split(", ");
         for (var j = 0; j < resources.length; j++) {
-            //logger.info("Adding: " + resources[j]);
             if (assignedTicketsObject[resources[j]] === undefined) { continue; }
             assignedTicketsObject[resources[j]].amount = assignedTicketsObject[resources[j]].amount + 1;
         }
     }
-    const arrOut = [];
     for (const tech in assignedTicketsObject) {
         if (assignedTicketsObject[tech].amount <= 0) {
             delete assignedTicketsObject[tech];
